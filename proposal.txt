@@ -1,0 +1,41 @@
+1. What goal will your website be designed to achieve?
+    The website will be used for translation between English and Chinese and to aid people trying to learn either language. 
+
+
+2. What kind of users will visit your site? In other words, what is the demographic of your users?
+    The demographic of the website would be mainly geared towards English speakers looking to translate or study Chinese, but could also be used by Chinese users to find English words by searching in Chinese.
+
+
+3. What data do you plan on using? You may have not picked your actual API yet,
+which is fine, just outline what kind of data you would like it to contain.
+    I will be using the Google Translate API in order to translate between English and Chinese as well as user data such as their email, translation history, and number of times viewing words.
+
+
+4. In brief, outline your approach to creating your project (knowing that you may not
+know everything in advance and that these details might change later). Answer
+questions like the ones below, but feel free to add more information:
+a. What does your database schema look like?
+    The user data such as their email, translation history, and number of times viewing words will be stored and API calls will be made in order to translate whatever words or sentences they input.
+
+
+b. What kinds of issues might you run into with your API?
+    I think I may run into issues setting up the Google client libraries necessary for using the API.
+
+
+c. Is there any sensitive information you need to secure?
+    I will be storing the user emails as well as their passwords which I will encrypt using bcrypt.
+
+
+d. What functionality will your app include?
+    The app will be able to translate words and sentences, show how many times you have searched a word, and show your translation search history.
+
+
+e. What will the user flow look like?
+    The app will mainly be on one page where the user can translate words and sentences but will also have a page to view their history.
+
+
+f. What features make your site more than CRUD? Do you have any stretch
+goals?
+    Communicating with the API to translate will go beyond CRUD and storing users and their info. Some stretch goals could be to have the app be a phone app or chrome extension.
+
+
