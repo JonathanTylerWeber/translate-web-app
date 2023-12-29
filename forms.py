@@ -8,3 +8,8 @@ class UserForm(FlaskForm):
 
     email = StringField('E-mail', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[Length(min=6)])
+
+class TranslateForm(FlaskForm):
+    """Form for translating."""
+
+    word = StringField('Translate', validators=[DataRequired()])

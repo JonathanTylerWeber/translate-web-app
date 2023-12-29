@@ -2,8 +2,19 @@
 {% block content %}
 <div class="row">
     <div class="col-lg-6 col-md-8 col-sm-12">
+        <form method="POST">
+            {{ form.csrf_token }}
+            {{ form.word.label }}
+            {{ form.word(size=20) }}
+            <input type="submit" value="Translate">
+        </form>
+        {% if translation %}
+        <h2>{{ translation }}</h2>
+        {% endif %}
+        {% if pinyin %}
+        <h3>{{ pinyin }}</h3>
+        {% endif %}
 
     </div>
-
 </div>
 {% endblock %}

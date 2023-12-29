@@ -2,11 +2,12 @@ from google.cloud import translate_v2 as translate
 
 import os, json
 
-from flask import Flask, render_template, request, flash, redirect, session, g, abort
+from flask import Flask, render_template, request, flash, redirect, session, g, abort, url_for
 from flask_debugtoolbar import DebugToolbarExtension 
 from sqlalchemy.exc import IntegrityError
+import re
 
-from forms import UserForm
+from forms import UserForm, TranslateForm
 from models import db, connect_db, User, Searches
 
 from dotenv import load_dotenv
@@ -35,23 +36,24 @@ app.config['SQLALCHEMY_DATABASE_URI'] = (
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = False
-app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = True
+app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', "it's a secret")
 toolbar = DebugToolbarExtension(app)
 
 connect_db(app)
+db.create_all()
 
-# detect the language
-detectResponse = translateClient.detect_language('muraho nshuti yanjye')
+# # detect the language
+# detectResponse = translateClient.detect_language('muraho nshuti yanjye')
 
-print(detectResponse)
-# {'language': 'rw', 'confidence': 1, 'input': 'muraho nshuti yanjye'}
+# print(detectResponse)
+# # {'language': 'rw', 'confidence': 1, 'input': 'muraho nshuti yanjye'}
 
-# translate a phrase
-translateResponse = translateClient.translate('muraho nshuti yanjye', 'en')
+# # translate a phrase
+# translateResponse = translateClient.translate('muraho nshuti yanjye', 'en')
 
-print(translateResponse)
-# {'translatedText': 'hello my friend', 'detectedSourceLanguage': 'rw', 'input': 'muraho nshuti yanjye'}
+# print(translateResponse)
+# # {'translatedText': 'hello my friend', 'detectedSourceLanguage': 'rw', 'input': 'muraho nshuti yanjye'}
 
 @app.before_request
 def add_user_to_g():
@@ -76,11 +78,61 @@ def do_logout():
     if CURR_USER_KEY in session:
         del session[CURR_USER_KEY]
 
-
-@app.route('/')
+  
+@app.route('/', methods=["GET", "POST"])
 def home():
-    """render home page"""
-    return render_template('home.html')
+    """Render home page and handle form submission."""
+    form = TranslateForm()  # Create an instance of the TranslateForm
+
+    if form.validate_on_submit():
+        word = form.word.data
+        detectResponse = translateClient.detect_language(word)
+        translateResponse = translateClient.translate(word, 'zh')
+
+        pinyin = search_word_in_file(translateResponse['translatedText'])
+        print(f'pinyin: {pinyin}')
+
+        # Store the translation in the session
+        session['translation'] = translateResponse['translatedText']
+        session['pinyin'] = pinyin
+
+        # Redirect to the home page
+        return redirect(url_for('home'))
+
+    # Retrieve translation from session if available
+    translation = session.pop('translation', None)
+    pinyin = session.pop('pinyin', None)
+
+    return render_template('home.html', form=form, translation=translation, pinyin=pinyin)
+
+
+def search_word_in_file(input_word):
+    file_path = 'pinyin.txt'
+    pinyin = ''
+
+    with open(file_path, 'r', encoding='utf-8') as file:
+        for char in input_word:
+            found = False
+            file.seek(0)  # Reset file position to the beginning for each character
+            for line in file:
+                if char in line:
+                    result = line.replace(char, '').strip()
+                    pinyin += result + ' '
+                    found = True
+                    break
+
+            if not found:
+                # If the character is not found, use a placeholder
+                pinyin += char + ' '
+
+    # Remove trailing space at the end
+    pinyin = pinyin.strip()
+
+    # print('**************************')
+    # print(f"Pinyin Result: {pinyin}")
+    return pinyin
+
+
 
 
 @app.route('/signup', methods=["GET", "POST"])
