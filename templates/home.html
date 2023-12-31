@@ -1,20 +1,45 @@
 {% extends 'base.html' %}
+
 {% block content %}
 <div class="row">
     <div class="col-lg-6 col-md-8 col-sm-12">
         <form method="POST">
             {{ form.csrf_token }}
-            {{ form.word.label }}
-            {{ form.word(size=20) }}
-            <input type="submit" value="Translate">
+
+            <div class="form-group row">
+                <div>
+                    <div class="form-check form-check-inline">
+                        {{ form.direction(class="form-check-input form-check-inline") }}
+                        {{ form.direction.label(class="form-check-label form-check-inline", style="display: none;") }}
+                    </div>
+                </div>
+            </div>
+            <br>
+            <br>
+
+            <div class="form-group row">
+                <div>
+                    {{ form.word(size=20, class="form-control") }}
+                </div>
+            </div>
+            <br>
+            <br>
+            <div class="form-group row">
+                <div>
+                    <button type="submit" class="btn btn-primary">Translate</button>
+                </div>
+            </div>
         </form>
+        <br>
+        <br>
+
         {% if translation %}
         <h2>{{ translation }}</h2>
         {% endif %}
+
         {% if pinyin %}
         <h3>{{ pinyin }}</h3>
         {% endif %}
-
     </div>
 </div>
 {% endblock %}

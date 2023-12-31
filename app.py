@@ -81,29 +81,54 @@ def do_logout():
   
 @app.route('/', methods=["GET", "POST"])
 def home():
-    """Render home page and handle form submission."""
-    form = TranslateForm()  # Create an instance of the TranslateForm
+    form = TranslateForm()
 
     if form.validate_on_submit():
         word = form.word.data
-        detectResponse = translateClient.detect_language(word)
-        translateResponse = translateClient.translate(word, 'zh')
+        direction = form.direction.data
 
-        pinyin = search_word_in_file(translateResponse['translatedText'])
-        print(f'pinyin: {pinyin}')
+        if direction == 'en_to_zh':
+            detectResponse = translateClient.detect_language(word)
+            translateResponse = translateClient.translate(word, 'zh')
+            pinyin = search_word_in_file(translateResponse['translatedText'])
+            session['pinyin'] = pinyin
+        else:
+            detectResponse = translateClient.detect_language(word)
+            translateResponse = translateClient.translate(word, 'en')
+            pinyin = ''
 
-        # Store the translation in the session
-        session['translation'] = translateResponse['translatedText']
+        word_lang = detectResponse['language']
+        translation_text = translateResponse['translatedText']
+
+        search = Searches(
+            word=word,
+            word_lang=word_lang,
+            translation=translation_text,
+            pinyin=pinyin,
+            user_id=g.user.id
+        )
+
+        db.session.add(search)
+        db.session.commit()
+
+        session['translation'] = translation_text
+        session['direction'] = direction
         session['pinyin'] = pinyin
 
-        # Redirect to the home page
         return redirect(url_for('home'))
 
-    # Retrieve translation from session if available
     translation = session.pop('translation', None)
     pinyin = session.pop('pinyin', None)
+    direction = session.pop('direction', None)
 
-    return render_template('home.html', form=form, translation=translation, pinyin=pinyin)
+    return render_template('home.html', form=form, translation=translation, pinyin=pinyin, direction=direction)
+
+
+
+@app.route('/history')
+def show_history_page():
+    searches = (Searches.query.filter(Searches.user_id == g.user.id).all())
+    return render_template('history.html', searches=searches)
 
 
 def search_word_in_file(input_word):

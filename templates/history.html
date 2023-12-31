@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Search history:</h1>
+
+<ul class="list-group"></ul>
+
+{% for search in searches %}
+
+<li class="list-group-item">
+    <div class="search">
+        {% if search.word_lang == 'en' %}
+        <p>Search: {{ search.word }}</p>
+        <p>Translation: {{ search.translation }}</p>
+        <p>Pinyin: {{ search.pinyin }}</p>
+        {% endif %}
+        {% if search.word_lang == 'zh' or search.word_lang == 'zh-CN' %}
+        <p>Search: {{ search.word }}</p>
+        <p>Pinyin: {{ search.pinyin }}</p>
+        <p>Translation: {{ search.translation }}</p>
+        {% endif %}
+    </div>
+</li>
+<br>
+
+{% endfor %}
+
+</ul>
+
+{% endblock %}

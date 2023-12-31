@@ -76,10 +76,18 @@ class Searches(db.Model):
         nullable=False
     )
 
-    times_searched = db.Column(
-        db.Integer,
-        default=0,
+    word_lang = db.Column(
+        db.Text,
         nullable=False
+    )
+
+    translation = db.Column(
+        db.Text,
+        nullable=False
+    )
+
+    pinyin = db.Column(
+        db.Text
     )
 
     user_id = db.Column(
