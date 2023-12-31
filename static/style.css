@@ -48,3 +48,13 @@ body.error-404 {
     margin-right: 10px;
     /* Adjust the margin as needed */
 }
+
+#translate-form #direction-en,
+#translate-form #direction-zh {
+    -webkit-appearance: radio;
+    /* For WebKit browsers like Chrome and Safari */
+    -moz-appearance: radio;
+    /* For Mozilla Firefox */
+    appearance: radio;
+    /* Standard property */
+}

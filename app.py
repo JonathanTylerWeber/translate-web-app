@@ -2,7 +2,7 @@ from google.cloud import translate_v2 as translate
 
 import os, json
 
-from flask import Flask, render_template, request, flash, redirect, session, g, abort, url_for
+from flask import Flask, render_template, request, flash, redirect, session, g, abort, url_for, jsonify
 from flask_debugtoolbar import DebugToolbarExtension 
 from sqlalchemy.exc import IntegrityError
 import re
@@ -78,24 +78,42 @@ def do_logout():
     if CURR_USER_KEY in session:
         del session[CURR_USER_KEY]
 
+
+@app.route('/')
+def take_home():
+    return redirect('/translate')
   
-@app.route('/', methods=["GET", "POST"])
+@app.route('/translate')
 def home():
     form = TranslateForm()
 
-    if form.validate_on_submit():
-        word = form.word.data
-        direction = form.direction.data
+    return render_template('home.html', form=form)
+
+
+@app.route('/translate', methods=["POST"])
+def translate():
+    try:
+        if request.is_json:
+            data = request.get_json()
+            word = data.get('word')
+            direction = data.get('direction')
+        else:
+            # Handle form data
+            word = request.form.get('word')
+            direction = request.form.get('direction')
+
+        if word is None or direction is None:
+            app.logger.error('Invalid request data')
+            return jsonify({'error': 'Invalid request data'})
 
         if direction == 'en_to_zh':
             detectResponse = translateClient.detect_language(word)
             translateResponse = translateClient.translate(word, 'zh')
             pinyin = search_word_in_file(translateResponse['translatedText'])
-            session['pinyin'] = pinyin
         else:
             detectResponse = translateClient.detect_language(word)
             translateResponse = translateClient.translate(word, 'en')
-            pinyin = ''
+            pinyin = search_word_in_file(word)
 
         word_lang = detectResponse['language']
         translation_text = translateResponse['translatedText']
@@ -111,17 +129,15 @@ def home():
         db.session.add(search)
         db.session.commit()
 
-        session['translation'] = translation_text
-        session['direction'] = direction
-        session['pinyin'] = pinyin
+        response_data = {
+            'translation': translation_text,
+            'pinyin': pinyin
+        }
+    except Exception as e:
+        app.logger.exception('An error occurred during translation:')
+        return jsonify({'error': str(e)})
 
-        return redirect(url_for('home'))
-
-    translation = session.pop('translation', None)
-    pinyin = session.pop('pinyin', None)
-    direction = session.pop('direction', None)
-
-    return render_template('home.html', form=form, translation=translation, pinyin=pinyin, direction=direction)
+    return jsonify(response_data)
 
 
 

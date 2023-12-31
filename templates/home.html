@@ -3,14 +3,20 @@
 {% block content %}
 <div class="row">
     <div class="col-lg-6 col-md-8 col-sm-12">
-        <form method="POST">
+        <form id="translate-form" method="POST">
             {{ form.csrf_token }}
 
             <div class="form-group row">
                 <div>
                     <div class="form-check form-check-inline">
-                        {{ form.direction(class="form-check-input form-check-inline") }}
-                        {{ form.direction.label(class="form-check-label form-check-inline", style="display: none;") }}
+                        <input type="radio" id="direction-en" name="direction" class="form-check-input" value="en_to_zh"
+                            checked>
+                        <label for="direction-en" class="form-check-label">English to Chinese</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input type="radio" id="direction-zh" name="direction" class="form-check-input"
+                            value="zh_to_en">
+                        <label for="direction-zh" class="form-check-label">Chinese to English</label>
                     </div>
                 </div>
             </div>
@@ -19,7 +25,7 @@
 
             <div class="form-group row">
                 <div>
-                    {{ form.word(size=20, class="form-control") }}
+                    {{ form.word(size=20, id='word', class="form-control") }}
                 </div>
             </div>
             <br>
@@ -33,13 +39,13 @@
         <br>
         <br>
 
-        {% if translation %}
-        <h2>{{ translation }}</h2>
-        {% endif %}
+        <div id="translation-container">
+            <h2 id="translation"></h2>
+        </div>
 
-        {% if pinyin %}
-        <h3>{{ pinyin }}</h3>
-        {% endif %}
+        <div id="pinyin-container">
+            <h3 id="pinyin"></h3>
+        </div>
     </div>
 </div>
 {% endblock %}
