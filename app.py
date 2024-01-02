@@ -2,7 +2,7 @@ from google.cloud import translate_v2 as translate
 
 import os, json
 
-from flask import Flask, render_template, request, flash, redirect, session, g, abort, url_for, jsonify
+from flask import Flask, render_template, request, flash, redirect, session, g, url_for, jsonify
 from flask_debugtoolbar import DebugToolbarExtension 
 from sqlalchemy.exc import IntegrityError
 import re
@@ -29,8 +29,6 @@ CURR_USER_KEY = "curr_user"
 
 app = Flask(__name__)
 
-# Get DB_URI from environ variable (useful for production/testing) or,
-# if not set there, use development local db.
 app.config['SQLALCHEMY_DATABASE_URI'] = (
     os.environ.get('DATABASE_URL', 'postgresql:///translate'))
 
@@ -42,18 +40,6 @@ toolbar = DebugToolbarExtension(app)
 
 connect_db(app)
 db.create_all()
-
-# # detect the language
-# detectResponse = translateClient.detect_language('muraho nshuti yanjye')
-
-# print(detectResponse)
-# # {'language': 'rw', 'confidence': 1, 'input': 'muraho nshuti yanjye'}
-
-# # translate a phrase
-# translateResponse = translateClient.translate('muraho nshuti yanjye', 'en')
-
-# print(translateResponse)
-# # {'translatedText': 'hello my friend', 'detectedSourceLanguage': 'rw', 'input': 'muraho nshuti yanjye'}
 
 @app.before_request
 def add_user_to_g():
@@ -85,6 +71,7 @@ def take_home():
   
 @app.route('/translate')
 def home():
+    """display translate page"""
     form = TranslateForm()
 
     return render_template('home.html', form=form)
@@ -92,6 +79,7 @@ def home():
 
 @app.route('/translate', methods=["POST"])
 def translate():
+    """translate input"""
     try:
         if request.is_json:
             data = request.get_json()
@@ -143,11 +131,13 @@ def translate():
 
 @app.route('/history')
 def show_history_page():
+    """display search history page"""
     searches = (Searches.query.filter(Searches.user_id == g.user.id).all())
     return render_template('history.html', searches=searches)
 
 
 def search_word_in_file(input_word):
+    """return pinyin for words"""
     file_path = 'pinyin.txt'
     pinyin = ''
 
@@ -169,8 +159,6 @@ def search_word_in_file(input_word):
     # Remove trailing space at the end
     pinyin = pinyin.strip()
 
-    # print('**************************')
-    # print(f"Pinyin Result: {pinyin}")
     return pinyin
 
 
