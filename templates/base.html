@@ -17,16 +17,18 @@
     <nav class="navbar navbar-expand">
         <div class="container-fluid">
             <div class="navbar-header">
-                <a href="/">
-                    <span>Translate</span>
-                </a>
+                <ul class="nav navbar-nav">
+                    <li><a href="/translate">Translate</a></li>
+                    {% if g.user %}
+                    <li><a href='/history'>Search History</a></li>
+                    {% endif %}
+                </ul>
             </div>
             <ul class="nav navbar-nav navbar-right">
                 {% if not g.user %}
                 <li><a href="/signup">Sign up</a></li>
                 <li><a href="/login">Log in</a></li>
                 {% else %}
-                <li><a href='/history'>Search History</a></li>
                 <li><a href="/logout">Log out</a></li>
                 {% endif %}
             </ul>

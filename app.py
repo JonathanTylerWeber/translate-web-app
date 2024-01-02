@@ -4,14 +4,19 @@ import os, json
 
 from flask import Flask, render_template, request, flash, redirect, session, g, url_for, jsonify
 from flask_debugtoolbar import DebugToolbarExtension 
+from flask_mail import Message, Mail
+from flask_bcrypt import Bcrypt
 from sqlalchemy.exc import IntegrityError
 import re
+import secrets
 
-from forms import UserForm, TranslateForm
-from models import db, connect_db, User, Searches
+from forms import UserForm, TranslateForm, PasswordResetRequestForm
+from models import db, connect_db, User, Searches, PasswordResetRequest
 
 from dotenv import load_dotenv
 load_dotenv()
+
+bcrypt = Bcrypt()
 
 CREDENTIALS = json.loads(os.environ.get('CREDENTIALS'))
 
@@ -36,7 +41,16 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = False
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', "it's a secret")
-toolbar = DebugToolbarExtension(app)
+
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USERNAME'] = 'jonathantweber@gmail.com'
+app.config['MAIL_PASSWORD'] = os.environ.get('MAIL_PASSWORD')
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_DEBUG'] = True
+
+mail = Mail(app)
+# toolbar = DebugToolbarExtension(app)
 
 connect_db(app)
 db.create_all()
@@ -72,6 +86,10 @@ def take_home():
 @app.route('/translate')
 def home():
     """display translate page"""
+    if not g.user:
+        flash("Must sign in first", "danger")
+        return redirect("/signup")
+
     form = TranslateForm()
 
     return render_template('home.html', form=form)
@@ -80,6 +98,10 @@ def home():
 @app.route('/translate', methods=["POST"])
 def translate():
     """translate input"""
+    if not g.user:
+        flash("Must sign in first", "danger")
+        return redirect("/signup")
+
     try:
         if request.is_json:
             data = request.get_json()
@@ -132,6 +154,10 @@ def translate():
 @app.route('/history')
 def show_history_page():
     """display search history page"""
+    if not g.user:
+        flash("Must sign in first", "danger")
+        return redirect("/signup")
+
     searches = (Searches.query.filter(Searches.user_id == g.user.id).all())
     return render_template('history.html', searches=searches)
 
@@ -226,6 +252,65 @@ def logout():
 
     flash("You have successfully logged out.", 'success')
     return redirect("/login")
+
+
+@app.route('/reset-password-request', methods=['GET', 'POST'])
+def reset_password_request():
+    form = PasswordResetRequestForm()
+
+    if form.validate_on_submit():
+        email = form.email.data
+        user = User.query.filter_by(email=email).first()
+        # Generate a unique token
+        token = secrets.token_urlsafe(20)
+
+        # Save the token to the database
+        reset_request = PasswordResetRequest(email=email, token=token)
+        db.session.add(reset_request)
+        db.session.commit()
+
+        # Send the password reset email
+        send_password_reset_email(email, token)
+
+        flash('An email has been sent with instructions to reset your password.', 'info')
+        return redirect(url_for('login'))
+
+    return render_template('reset_password_request.html', form=form)
+
+def send_password_reset_email(email, token):
+    subject = 'Password Reset Request'
+    msg_body = f'Click the following link to reset your password: {url_for("reset_password", token=token, _external=True)}'
+    sender = 'noreply@app.com'
+    msg = Message(subject, sender=sender, recipients=[email], body=msg_body)
+    print(app.config['MAIL_SERVER'], app.config['MAIL_PORT'])
+    mail.send(msg)
+
+
+@app.route('/reset-password/<token>', methods=['GET', 'POST'])
+def reset_password(token):
+    reset_request = PasswordResetRequest.query.filter_by(token=token).first()
+
+    if reset_request:
+        # Add a form for users to enter a new password
+        form = UserForm()
+
+        if form.validate_on_submit():
+            # Update the user's password
+            user = User.query.filter_by(email=reset_request.email).first()
+            user.password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+            
+            # Delete the reset request
+            db.session.delete(reset_request)
+            db.session.commit()
+
+            flash('Your password has been reset successfully.', 'success')
+            return redirect(url_for('login'))
+
+        return render_template('reset_password.html', form=form)
+
+    flash('Invalid or expired reset link.', 'danger')
+    return redirect(url_for('login'))
+
 
 @app.after_request
 def add_header(req):

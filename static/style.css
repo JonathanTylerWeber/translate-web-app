@@ -46,7 +46,12 @@ body.error-404 {
 
 .navbar-nav>li {
     margin-right: 10px;
-    /* Adjust the margin as needed */
+    list-style-type: none;
+}
+
+.navbar-header {
+    margin-right: 10px;
+    list-style-type: none;
 }
 
 #translate-form #direction-en,
