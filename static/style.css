@@ -3,6 +3,10 @@
     /* Set to the desired width */
 }
 
+/* input:focus {
+    outline: none;
+} */
+
 body {
     background-color: #e6ecf0;
 }

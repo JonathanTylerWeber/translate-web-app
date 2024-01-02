@@ -9,6 +9,7 @@ from flask_bcrypt import Bcrypt
 from sqlalchemy.exc import IntegrityError
 import re
 import secrets
+from xpinyin import Pinyin
 
 from forms import UserForm, TranslateForm, PasswordResetRequestForm
 from models import db, connect_db, User, Searches, PasswordResetRequest
@@ -17,6 +18,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 bcrypt = Bcrypt()
+p = Pinyin()
 
 CREDENTIALS = json.loads(os.environ.get('CREDENTIALS'))
 
@@ -119,11 +121,13 @@ def translate():
         if direction == 'en_to_zh':
             detectResponse = translateClient.detect_language(word)
             translateResponse = translateClient.translate(word, 'zh')
-            pinyin = search_word_in_file(translateResponse['translatedText'])
+            # pinyin = search_word_in_file(translateResponse['translatedText'])
+            pinyin = p.get_pinyin(translateResponse['translatedText'], splitter=' ', tone_marks='marks')
         else:
             detectResponse = translateClient.detect_language(word)
             translateResponse = translateClient.translate(word, 'en')
-            pinyin = search_word_in_file(word)
+            # pinyin = search_word_in_file(word)
+            pinyin = p.get_pinyin(word, splitter=' ', tone_marks='marks')
 
         word_lang = detectResponse['language']
         translation_text = translateResponse['translatedText']
@@ -162,30 +166,30 @@ def show_history_page():
     return render_template('history.html', searches=searches)
 
 
-def search_word_in_file(input_word):
-    """return pinyin for words"""
-    file_path = 'pinyin.txt'
-    pinyin = ''
+# def search_word_in_file(input_word):
+#     """return pinyin for words"""
+#     file_path = 'pinyin.txt'
+#     pinyin = ''
 
-    with open(file_path, 'r', encoding='utf-8') as file:
-        for char in input_word:
-            found = False
-            file.seek(0)  # Reset file position to the beginning for each character
-            for line in file:
-                if char in line:
-                    result = line.replace(char, '').strip()
-                    pinyin += result + ' '
-                    found = True
-                    break
+#     with open(file_path, 'r', encoding='utf-8') as file:
+#         for char in input_word:
+#             found = False
+#             file.seek(0)  # Reset file position to the beginning for each character
+#             for line in file:
+#                 if char in line:
+#                     result = line.replace(char, '').strip()
+#                     pinyin += result + ' '
+#                     found = True
+#                     break
 
-            if not found:
-                # If the character is not found, use a placeholder
-                pinyin += char + ' '
+#             if not found:
+#                 # If the character is not found, use a placeholder
+#                 pinyin += char + ' '
 
-    # Remove trailing space at the end
-    pinyin = pinyin.strip()
+#     # Remove trailing space at the end
+#     pinyin = pinyin.strip()
 
-    return pinyin
+#     return pinyin
 
 
 
