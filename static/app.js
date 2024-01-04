@@ -37,4 +37,51 @@ $(document).ready(function () {
             },
         });
     });
+
+    $('.delete-search').click(function () {
+        // Get the search ID from the data attribute
+        let searchId = $(this).data('search-id');
+        // Send an AJAX request to the server to delete the search
+        $.ajax({
+            type: 'DELETE',
+            url: `/history/${searchId}/delete`,
+            success: function () {
+                // Remove the deleted search from the DOM
+                $(`.delete-search[data-search-id="${searchId}"]`).closest('li').remove();
+                console.log('Search deleted successfully.');
+            },
+            error: function (error) {
+                console.error('Error deleting search:', error);
+                // Optionally display an error message on the page
+            },
+        });
+
+    });
+
+    $('.save-search').click(function () {
+        const searchId = $(this).data('search-id');
+        const saved = $(this).data('saved') === 'fas';
+
+        // Store a reference to 'this' for later use
+        const $this = $(this);
+
+        // Send an AJAX request to update save state
+        $.ajax({
+            type: 'POST',
+            url: `/history/${searchId}/save`,
+            contentType: 'application/json',
+            success: function (response) {
+                if (response.error) {
+                    console.error('Error:', response.error);
+                    // Optionally display an error message on the page
+                    return;
+                }
+
+                // Toggle the saved state and update the icon
+                const newClass = !saved ? 'fas' : 'far';
+                $this.data('saved', newClass);
+                $this.removeClass('far fas').addClass(newClass);
+            },
+        });
+    });
 });

@@ -1,8 +1,7 @@
 from flask_bcrypt import Bcrypt
 from flask_sqlalchemy import SQLAlchemy
 import secrets
-from datetime import datetime, timedelta
-from sqlalchemy import Column, DateTime
+from sqlalchemy import Column
 
 bcrypt = Bcrypt()
 db = SQLAlchemy()
@@ -104,13 +103,18 @@ class Searches(db.Model):
         backref='user_searches'
     )
 
+    is_saved = db.Column(
+        db.Boolean,
+        default=False,
+        nullable=False
+    )
+
 class PasswordResetRequest(db.Model):
     __tablename__ = 'password_reset_requests'
 
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(120), nullable=False)
     token = db.Column(db.String(50), nullable=False, unique=True)
-
 
 
 def connect_db(app):

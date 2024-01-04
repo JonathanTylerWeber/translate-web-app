@@ -38,17 +38,13 @@ body.error-404 {
     z-index: 9999;
 }
 
-.navbar a {
-    color: #66757f;
-    font-size: 13px;
-    font-weight: bold;
+.navbar-nav {
+    display: flex;
+    align-items: center;
 }
 
-.navbar a:hover {
-    color: #1c94e0;
-}
-
-.navbar-nav>li {
+.navbar-brand,
+.navbar-nav .nav-item {
     margin-right: 10px;
     list-style-type: none;
 }
@@ -58,6 +54,7 @@ body.error-404 {
     list-style-type: none;
 }
 
+
 #translate-form #direction-en,
 #translate-form #direction-zh {
     -webkit-appearance: radio;
@@ -66,4 +63,52 @@ body.error-404 {
     /* For Mozilla Firefox */
     appearance: radio;
     /* Standard property */
+}
+
+
+.white-box {
+    background-color: #ffffff;
+    /* Set background color to white */
+    border: 1px solid #ddd;
+    /* Add a border for separation */
+    border-radius: 8px;
+    /* Add rounded corners for a softer look */
+    padding: 15px;
+    /* Add padding inside the box */
+    margin-bottom: 20px;
+    /* Add some space between boxes */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    /* Add a subtle shadow for depth */
+}
+
+/* Optional: Center the content inside the white box */
+.white-box .text-center {
+    margin: 0 auto;
+}
+
+/* Optional: Style the headings inside the white box */
+.white-box h2,
+.white-box h3 {
+    color: #333;
+    /* Set heading color */
+}
+
+.fa-trash {
+    position: absolute;
+    bottom: 24px;
+    right: 16px;
+}
+
+.fa-trash:hover {
+    cursor: pointer;
+}
+
+.fa-star {
+    position: absolute;
+    top: 8px;
+    right: 16px;
+}
+
+.fa-star:hover {
+    cursor: pointer;
 }

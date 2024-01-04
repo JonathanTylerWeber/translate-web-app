@@ -154,7 +154,6 @@ def translate():
     return jsonify(response_data)
 
 
-
 @app.route('/history')
 def show_history_page():
     """display search history page"""
@@ -164,34 +163,6 @@ def show_history_page():
 
     searches = (Searches.query.filter(Searches.user_id == g.user.id).all())
     return render_template('history.html', searches=searches)
-
-
-# def search_word_in_file(input_word):
-#     """return pinyin for words"""
-#     file_path = 'pinyin.txt'
-#     pinyin = ''
-
-#     with open(file_path, 'r', encoding='utf-8') as file:
-#         for char in input_word:
-#             found = False
-#             file.seek(0)  # Reset file position to the beginning for each character
-#             for line in file:
-#                 if char in line:
-#                     result = line.replace(char, '').strip()
-#                     pinyin += result + ' '
-#                     found = True
-#                     break
-
-#             if not found:
-#                 # If the character is not found, use a placeholder
-#                 pinyin += char + ' '
-
-#     # Remove trailing space at the end
-#     pinyin = pinyin.strip()
-
-#     return pinyin
-
-
 
 
 @app.route('/signup', methods=["GET", "POST"])
@@ -314,6 +285,59 @@ def reset_password(token):
 
     flash('Invalid or expired reset link.', 'danger')
     return redirect(url_for('login'))
+
+
+@app.route('/history/<int:search_id>/save', methods=["POST"])
+def save_unsave_search(search_id):
+    """Save or unsave a search."""
+
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return jsonify({'error': 'Access unauthorized'}), 401
+
+    search = Searches.query.get(search_id)
+
+    if not search or search.user_id != g.user.id:
+        flash("Search not found or unauthorized.", "danger")
+        return jsonify({'error': 'Search not found or unauthorized'}), 404
+
+    # Toggle the is_saved state
+    search.is_saved = not search.is_saved
+
+    db.session.commit()
+
+    return jsonify({'message': 'Search saved/unsaved successfully'})
+
+
+@app.route('/saved-searches')
+def saved_searches():
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return jsonify({'error': 'Access unauthorized'}), 401
+    # user = current_user  # Assuming you are using Flask-Login
+    saved_searches = Searches.query.filter_by(user_id=g.user.id, is_saved=True).all()
+    return render_template('saved_searches.html', searches=saved_searches)
+
+
+
+@app.route('/history/<int:search_id>/delete', methods=["DELETE"])
+def delete_search(search_id):
+    """Delete a search."""
+
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return jsonify({'error': 'Access unauthorized'}), 401
+
+    search = Searches.query.get(search_id)
+
+    if not search or search.user_id != g.user.id:
+        flash("Search not found or unauthorized.", "danger")
+        return jsonify({'error': 'Search not found or unauthorized'}), 404
+
+    db.session.delete(search)
+    db.session.commit()
+
+    return jsonify({'message': 'Search deleted successfully'})
 
 
 @app.after_request
