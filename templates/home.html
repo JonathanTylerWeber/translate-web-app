@@ -1,47 +1,54 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="row justify-content-md-center">
-    <div class="col-lg-6 col-md-8 col-sm-12">
-        <h1 class="text-center mb-5">Translate</h1>
+
+<div class="row justify-content-md-center align-items-center">
+    <div class="col-lg-10 col-md-12 col-sm-12 text-center">
+        <h1 class="mb-5">Translate</h1>
+
         <form id="translate-form" method="POST">
             {{ form.csrf_token }}
 
-            <div class="form-group row justify-content-center mb-5">
-                <div class="col-auto">
-                    <div class="form-check form-check-inline">
-                        <input type="radio" id="direction-en" name="direction" class="form-check-input" value="en_to_zh"
-                            checked>
-                        <label for="direction-en" class="form-check-label">English to Chinese</label>
-                    </div>
-                </div>
-                <div class="col-auto">
-                    <div class="form-check form-check-inline">
-                        <input type="radio" id="direction-zh" name="direction" class="form-check-input"
-                            value="zh_to_en">
-                        <label for="direction-zh" class="form-check-label">Chinese to English</label>
-                    </div>
-                </div>
-            </div>
-            <div class="form-group row mb-5">
+            <div class="icon-container d-flex justify-content-center mb-3">
                 <div>
-                    {{ form.word(size=20, rows=3, id='word', class="form-control") }}
+                    <h4 id="source-language" class="mb-0">English</h4>
+                </div>
+                <div class="mt-1">
+                    <i id="switch-direction" class="fas fa-exchange-alt"></i>
+                </div>
+                <div>
+                    <h4 id="target-language" class="mb-0">Chinese</h4>
                 </div>
             </div>
-            <div class="form-group row mb-5">
+
+            <div class="row justify-content-center">
+                <div class="col-md-6 mb-4 mb-md-0">
+                    <div class="form-group row mb-4">
+                        <div class="col">
+                            {{ form.word(size=35, rows=4, id='word', class="form-control custom-textarea") }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="white-box">
+                        <div id="translation-container">
+                            <p id="translation"></p>
+                            <p id="pinyin"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group row justify-content-center">
                 <div class="col text-center">
                     <button type="submit" class="btn btn-primary mx-auto">Translate</button>
                 </div>
             </div>
+
         </form>
-        <div class="white-box mb-3 p-3">
-            <div id="translation-container" class="text-center">
-                <h2 id="translation"></h2>
-            </div>
-            <div id="pinyin-container" class="text-center">
-                <h3 id="pinyin"></h3>
-            </div>
-        </div>
     </div>
 </div>
+
+
 {% endblock %}

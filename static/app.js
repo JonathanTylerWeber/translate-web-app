@@ -1,12 +1,42 @@
 $(document).ready(function () {
+    // Initialize the default direction
+    let direction = 'en_to_zh';
+
+    // Attach an event listener to the switch icon
+    $('#switch-direction').click(function () {
+        // Toggle the direction
+        direction = direction === 'en_to_zh' ? 'zh_to_en' : 'en_to_zh';
+
+        // Update the placeholder text for the input field
+        const placeholder = direction === 'en_to_zh' ? 'Enter English text...' : '输入中文...';
+        $('#word').attr('placeholder', placeholder);
+
+        // Update the translation direction on the page
+        updateTranslationDirection(direction);
+    });
+
+    // Function to update the translation direction on the page
+    function updateTranslationDirection(newDirection) {
+        // Update the direction in the form data
+        $('input[name="direction"]').val(newDirection);
+
+        // Update the source and target language labels
+        const sourceLanguage = newDirection === 'en_to_zh' ? 'English' : 'Chinese';
+        const targetLanguage = newDirection === 'en_to_zh' ? 'Chinese' : 'English';
+        $('#source-language').text(sourceLanguage);
+        $('#target-language').text(targetLanguage);
+
+        // Optionally, update other elements on the page based on the direction
+    }
+
+
     // Attach an event listener to the form submission
     $('#translate-form').submit(function (event) {
         // Prevent the default form submission
         event.preventDefault();
 
-        // Get the word and direction from the form
+        // Get the word from the form
         let word = $('#word').val();
-        let direction = $('input[name="direction"]:checked').val();
 
         console.log('Form data:', { 'word': word, 'direction': direction });
 

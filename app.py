@@ -161,7 +161,7 @@ def show_history_page():
         flash("Must sign in first", "danger")
         return redirect("/signup")
 
-    searches = (Searches.query.filter(Searches.user_id == g.user.id).all())
+    searches = Searches.query.filter_by(user_id=g.user.id).order_by(Searches.id.desc()).all()
     return render_template('history.html', searches=searches)
 
 
@@ -315,7 +315,7 @@ def saved_searches():
         flash("Access unauthorized.", "danger")
         return jsonify({'error': 'Access unauthorized'}), 401
     # user = current_user  # Assuming you are using Flask-Login
-    saved_searches = Searches.query.filter_by(user_id=g.user.id, is_saved=True).all()
+    saved_searches = Searches.query.filter_by(user_id=g.user.id, is_saved=True).order_by(Searches.id.desc()).all()
     return render_template('saved_searches.html', searches=saved_searches)
 
 

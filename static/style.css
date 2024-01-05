@@ -68,29 +68,27 @@ body.error-404 {
 
 .white-box {
     background-color: #ffffff;
-    /* Set background color to white */
     border: 1px solid #ddd;
-    /* Add a border for separation */
     border-radius: 8px;
-    /* Add rounded corners for a softer look */
-    padding: 15px;
-    /* Add padding inside the box */
-    margin-bottom: 20px;
-    /* Add some space between boxes */
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    /* Add a subtle shadow for depth */
+    padding: 6px 12px;
+    min-height: 110px;
+    /* Set to at least 100% of the parent container */
 }
 
-/* Optional: Center the content inside the white box */
-.white-box .text-center {
-    margin: 0 auto;
+button {
+    margin-top: 1em;
 }
 
-/* Optional: Style the headings inside the white box */
-.white-box h2,
-.white-box h3 {
-    color: #333;
-    /* Set heading color */
+.custom-textarea {
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+p {
+    margin-bottom: 0;
 }
 
 .fa-trash {
@@ -111,4 +109,19 @@ body.error-404 {
 
 .fa-star:hover {
     cursor: pointer;
+}
+
+.fa-exchange-alt:hover {
+    cursor: pointer;
+}
+
+#switch-direction {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+
+#source-language {
+    margin-right: 3em;
 }

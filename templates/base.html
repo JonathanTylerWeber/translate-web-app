@@ -10,23 +10,24 @@
 
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css">
     <link rel="stylesheet" href="/static/style.css">
-
+    <link rel="icon" type="image/ico" href="/static/favicon.ico">
 </head>
 
-<body class="{% block body_class %}{% endblock %}">
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+<body>
+    <nav class="navbar navbar-expand navbar-light bg-light">
         <div class="container-fluid">
             <div class="navbar-header">
-                <a class="navbar-brand" href="/translate">Translate</a>
+                <a class="navbar-brand" href="/translate">
+                    <i class="fas fa-language"></i> Translate</a>
             </div>
-            <div class="collapse navbar-collapse">
-                <ul class="navbar-nav mr-auto">
+            <div class="navbar-collapse">
+                <ul class="navbar-nav">
                     {% if g.user %}
                     <li class="nav-item"><a class="nav-link" href='/history'>History</a></li>
                     <li class="nav-item"><a class="nav-link" href='/saved-searches'>Saved</a></li>
                     {% endif %}
                 </ul>
-                <ul class="nav navbar-nav">
+                <ul class="nav navbar-nav ms-auto">
                     {% if not g.user %}
                     <li class="nav-item"><a class="nav-link" href="/signup">Sign up</a></li>
                     <li class="nav-item"><a class="nav-link" href="/login">Log in</a></li>
@@ -37,7 +38,6 @@
             </div>
         </div>
     </nav>
-
     <div class="container">
         {% for category, message in get_flashed_messages(with_categories=True) %}
         <div class="alert alert-{{ category }}">{{ message }}</div>
@@ -45,7 +45,6 @@
 
         {% block content %}
         {% endblock %}
-
     </div>
 
     <script src="https://unpkg.com/jquery"></script>
