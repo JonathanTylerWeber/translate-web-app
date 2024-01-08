@@ -1,50 +1,57 @@
-<div class="row justify-content-md-center align-items-center">
-    <div class="col-lg-10 col-md-12 col-sm-12 text-center">
-        <h1 class="mb-4">Translate</h1>
+<!DOCTYPE html>
+<html lang="en">
 
-        <form id="translate-form" method="POST">
-            {{ form.csrf_token }}
+<head>
+    <meta charset="UTF-8">
+    <title>Translate</title>
 
-            <div class="icon-container d-flex justify-content-center mb-3">
-                <div>
-                    <h4 id="source-language" class="mb-0">English</h4>
-                </div>
-                <div class="mt-1">
-                    <i id="switch-direction" class="fas fa-exchange-alt"></i>
-                </div>
-                <div>
-                    <h4 id="target-language" class="mb-0">Chinese</h4>
-                </div>
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap/dist/css/bootstrap.css">
+    <script src="https://unpkg.com/bootstrap"></script>
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css">
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="shortcut icon" type="image/jpg" href="/static/favicon.ico?v=2">
+</head>
+
+<body>
+    <nav class="navbar nav-2 navbar-expand">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand nav-text" href="/translate">
+                    <i class="fas fa-language"></i> Translate</a>
             </div>
-
-            <div class="row justify-content-center translate box">
-                <div class="col-md-6 mb-md-0">
-                    <div class="form-group row ">
-                        <div class="col">
-                            {{ form.word(size=35, rows=4, id='word', class="form-control custom-textarea") }}
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-6 mb-4">
-                    <div class="white-box">
-                        <div id="translation-container">
-                            <p id="translation"></p>
-                            <p id="pinyin"></p>
-                        </div>
-                    </div>
-                </div>
+            <div class="navbar-collapse">
+                <ul class="navbar-nav">
+                    {% if g.user %}
+                    <li class="nav-item"><a class="nav-link nav-text" href='/history'>History</a></li>
+                    <li class="nav-item"><a class="nav-link nav-text" href='/saved-searches'>Saved</a></li>
+                    {% endif %}
+                </ul>
+                <ul class="nav navbar-nav ms-auto">
+                    {% if not g.user %}
+                    <li class="nav-item"><a class="nav-link nav-text" href="/signup">Sign up</a></li>
+                    <li class="nav-item"><a class="nav-link nav-text" href="/login">Log in</a></li>
+                    {% else %}
+                    <li class="nav-item"><a class="nav-link nav-text" href="/logout">Log out</a></li>
+                    {% endif %}
+                </ul>
             </div>
+        </div>
+    </nav>
 
-            <div class="form-group row justify-content-center">
-                <div class="col text-center">
-                    <button type="submit" class="btn custom-btn-primary mx-auto">Translate</button>
-                </div>
-            </div>
-
-        </form>
+    <div id="left-side" class="side">
+        <h2 class="title">
+            Translate from English to Chinese
+        </h2>
     </div>
-</div>
+    <div id="right-side" class="side">
+        <h2 id='start-cn' class="title">
+            把中文翻译成英文
+        </h2>
+    </div>
 
+    <script src="https://unpkg.com/jquery"></script>
+    <script src="/static/app.js"></script>
+</body>
 
-{% endblock %}
+</html>

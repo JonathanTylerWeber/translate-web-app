@@ -88,7 +88,7 @@ def do_logout():
 
 @app.route('/')
 def take_home():
-    return redirect('/translate')
+    return render_template('start.html')
   
 @app.route('/translate')
 def home():
@@ -199,7 +199,7 @@ def signup():
 
         do_login(user)
 
-        return redirect("/")
+        return redirect("/translate")
 
     else:
         return render_template('signup.html', form=form)
@@ -217,7 +217,7 @@ def login():
 
         if user:
             do_login(user)
-            return redirect("/")
+            return redirect("/translate")
 
         flash("Invalid credentials.", 'danger')
 

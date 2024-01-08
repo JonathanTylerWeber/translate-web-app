@@ -1,3 +1,16 @@
+const left = document.getElementById('left-side');
+
+const handleOnMove = e => {
+    const p = e.clientX ? e.clientX / window.innerWidth * 100 : e.touches[0].clientX / window.innerWidth * 100;
+
+    left.style.width = `${p}%`;
+}
+
+document.onmousemove = e => handleOnMove(e);
+
+document.ontouchmove = e => handleOnMove(e.touches[0]);
+
+
 $(document).ready(function () {
     // Initialize the default direction
     let direction = 'en_to_zh';

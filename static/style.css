@@ -27,11 +27,19 @@ h2 {
 
 /* ======================= Nav */
 
-.navbar {
+.nav-1 {
     background-color: #fff;
     height: 46px;
     border-bottom: 1px solid rgba(0, 0, 0, 0.25);
     margin-bottom: 1rem;
+    position: relative;
+    z-index: 9999;
+}
+
+.nav-2 {
+    background-color: #fff;
+    height: 46px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.25);
     position: relative;
     z-index: 9999;
 }
@@ -279,5 +287,39 @@ a:hover {
 .alert-info {
     background-color: #018786;
     border-color: #018786;
+    color: black;
+}
+
+body {
+    overflow: hidden;
+    /* Add this line to hide vertical scroll */
+}
+
+.side {
+    height: 100vh;
+    width: 100%;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    position: absolute;
+}
+
+.side .title {
+    color: white;
+    font-size: 8vw;
+    margin: 0 15vw;
+    width: 70vw;
+}
+
+#left-side {
+    background-color: rgb(18, 18, 18);
+    z-index: 2;
+}
+
+#right-side {
+    background-color: #BB86FC;
+}
+
+#start-cn {
     color: black;
 }
