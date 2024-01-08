@@ -8,23 +8,21 @@
 } */
 
 body {
-    background-color: #e6ecf0;
+    background-color: rgb(18, 18, 18);
 }
 
-body.error-404 {
-    background-color: #1da1f2;
+h1,
+h2,
+h4 {
+    color: #fff;
+}
+
+h2 {
+    margin-bottom: 1em;
 }
 
 .form-control {
     margin-bottom: 20px;
-}
-
-.btn {
-    border-radius: 50px;
-}
-
-.btn:hover {
-    cursor: pointer;
 }
 
 /* ======================= Nav */
@@ -36,6 +34,18 @@ body.error-404 {
     margin-bottom: 1rem;
     position: relative;
     z-index: 9999;
+}
+
+.navbar {
+    background-color: rgb(41, 41, 41);
+}
+
+.nav-text {
+    color: #fff;
+}
+
+.nav-text:hover {
+    color: #BB86FC;
 }
 
 .navbar-nav {
@@ -65,36 +75,134 @@ body.error-404 {
     /* Standard property */
 }
 
-
-.white-box {
-    background-color: #ffffff;
-    border: 1px solid #ddd;
+.custom-textarea {
+    color: #fff;
+    background-color: rgb(41, 41, 41);
     border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-color: rgb(41, 41, 41);
     padding: 6px 12px;
     min-height: 110px;
-    /* Set to at least 100% of the parent container */
+    border: none;
+    overflow: auto;
+    outline: none;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    resize: none;
 }
 
-button {
-    margin-top: 1em;
-}
-
-.custom-textarea {
-    background-color: #ffffff;
-    border: 1px solid #ddd;
+.custom-textarea:focus {
+    color: #fff;
+    background-color: rgb(41, 41, 41);
     border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-color: rgb(41, 41, 41);
+    border: none;
+    overflow: auto;
+    outline: none;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    resize: none;
+}
+
+.custom-textarea::placeholder {
+    color: rgb(200, 200, 200);
+}
+
+.white-box {
+    background-color: rgb(41, 41, 41);
+    border-radius: 8px;
+    padding: 6px 12px;
+    min-height: 110px;
+}
+
+/* Normal styles for input */
+input.input-style,
+input.input-style:focus {
+    background-color: rgb(41, 41, 41) !important;
+    color: #fff !important;
+    border: none;
+    overflow: auto;
+    outline: none;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+}
+
+input.input-style::before,
+input.input-style::after {
+    background-color: rgb(41, 41, 41) !important;
+    color: #fff !important;
+    content: none !important;
+    /* Override content added by browsers */
+}
+
+/* Autofill styles */
+input.input-style:-webkit-autofill,
+input.input-style:-webkit-autofill:active {
+    transition: background-color 5000s ease-in-out 0s;
+    /* Add a long transition time to override Chrome's autofill background color */
+}
+
+/* Set text color for autofill */
+input.input-style:-webkit-autofill,
+input.input-style:-webkit-autofill:active,
+input.input-style:-internal-autofill-selected {
+    -webkit-text-fill-color: #fff !important;
+    caret-color: #fff !important;
+    color: #fff !important;
+}
+
+
+
+
+input.input-style::placeholder {
+    color: #fff;
+}
+
+.custom-btn-primary {
+    margin-top: 1em;
+    background-color: #BB86FC;
+    border-color: #BB86FC;
+    color: black;
+    transition: transform 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+    transform-origin: center center;
+}
+
+.custom-btn-primary:hover {
+    background-color: #a664f8 !important;
+    border-color: #a664f8;
+    color: #fff !important;
+    transform: scale(1.1);
+    cursor: pointer;
+}
+
+.custom-btn-primary:active,
+.custom-btn-primary:focus {
+    background-color: #BB86FC;
+    border-color: #BB86FC;
+    color: black;
+    outline: none;
 }
 
 p {
     margin-bottom: 0;
+    color: #fff;
+}
+
+a {
+    color: #BB86FC
+}
+
+a:hover {
+    color: #fff;
 }
 
 .fa-trash {
     position: absolute;
     bottom: 24px;
     right: 16px;
+    color: #BB86FC;
 }
 
 .fa-trash:hover {
@@ -105,6 +213,7 @@ p {
     position: absolute;
     top: 8px;
     right: 16px;
+    color: #BB86FC;
 }
 
 .fa-star:hover {
@@ -119,6 +228,16 @@ p {
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
+    color: #fff;
+    transition: transform 0.3s ease;
+    transform-origin: center center;
+}
+
+#switch-direction:hover {
+    transform: scale(1.3) translateX(-50%);
+    color: #BB86FC;
+    position: absolute;
+    left: 50%;
 }
 
 #source-language {
@@ -127,7 +246,8 @@ p {
 
 .list-group-item {
     border-radius: 10px;
-    /* Adjust the value as per your preference */
+    background-color: rgb(41, 41, 41);
+    border: none;
 }
 
 .list-group-item:first-child {
@@ -142,4 +262,22 @@ p {
 
 #translation-container {
     text-align: left;
+}
+
+.alert-success {
+    background-color: #bb86fc;
+    border-color: #bb86fc;
+    color: black;
+}
+
+.alert-danger {
+    background-color: #cf6679;
+    border-color: #cf6679;
+    color: black;
+}
+
+.alert-info {
+    background-color: #018786;
+    border-color: #018786;
+    color: black;
 }
