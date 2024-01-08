@@ -8,15 +8,15 @@ The Translate Web App is a tool that allows users to translate words or phrases 
 ### Features
 
 1. **Translation:** Users can translate text from English to Chinese or from Chinese to English.
-2. **Search History:** Users can view their translation history on the "History" page.
-3. **Save/Unsave Searches:** Users can save or unsave translations to easily access them later on the "Saved Searches" page.
+2. **Search History:** Users can view their translation history on the "History" page and delete or save searches.
+3. **Save/Unsave Searches:** Users can save or unsave translations to easily access them later on the "Saved Searches" page as well as delete searches.
 4. **Password Reset:** Users can request a password reset if they forget their password.
 5. **Responsive Design:** The app is designed to be responsive and accessible on various devices.
 
 ### User Flow
 
 1. **Home Page (/)**
-   - Users land on the home page, where they are presented with basic information about the Translate Web App.
+   - Users land on the home page, with a stylistic design.
 
 2. **Translate Page (/translate)**
    - Users navigate to the Translate page where they can input text and choose the translation direction.
@@ -48,20 +48,9 @@ The app uses the Google Cloud Translate API for language detection and translati
 - **Backend:** Flask (Python)
 - **Database:** PostgreSQL
 - **Translation API:** Google Cloud Translate
-- **Additional Libraries:** Flask-DebugToolbar, Flask-Bcrypt, Xpinyin, Mailjet, Python-dotenv
+- **Additional Libraries:** Flask-DebugToolbar, Flask-Bcrypt, Xpinyin, Mailjet, Python-dotenv, Font Awesome
 
 ### Notes
 
 - The app uses the Mailjet API to send password reset emails.
 - User passwords are hashed using Flask-Bcrypt for security.
-
-### Important
-
-- Do not forget to set up the necessary environment variables, including API keys and database URL.
-- The app requires a Google Cloud Translate API key.
-- Ensure that the required Python libraries are installed (`requirements.txt`).
-
-### Other Information
-
-- The app includes non-caching headers to ensure data privacy and security.
-- Responsive design ensures a seamless user experience on different devices.
