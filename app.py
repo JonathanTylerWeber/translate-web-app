@@ -4,7 +4,6 @@ import os, json
 
 from flask import Flask, render_template, request, flash, redirect, session, g, url_for, jsonify
 from flask_debugtoolbar import DebugToolbarExtension 
-# from flask_mail import Message, Mail
 from flask_bcrypt import Bcrypt
 from sqlalchemy.exc import IntegrityError
 import re
@@ -48,14 +47,6 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = False
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', "it's a secret")
-
-# app.config['MAIL_SERVER'] = 'smtp.gmail.com'
-# app.config['MAIL_PORT'] = 587
-# app.config['MAIL_USERNAME'] = 'jonathantweber@gmail.com'
-# app.config['MAIL_PASSWORD'] = os.environ.get('MAIL_PASSWORD')
-# app.config['MAIL_USE_TLS'] = True
-# app.config['MAIL_DEBUG'] = True
-# mail = Mail(app)
 
 # toolbar = DebugToolbarExtension(app)
 
@@ -115,7 +106,6 @@ def translate():
             word = data.get('word')
             direction = data.get('direction')
         else:
-            # Handle form data
             word = request.form.get('word')
             direction = request.form.get('direction')
 
@@ -126,12 +116,10 @@ def translate():
         if direction == 'en_to_zh':
             detectResponse = translateClient.detect_language(word)
             translateResponse = translateClient.translate(word, 'zh')
-            # pinyin = search_word_in_file(translateResponse['translatedText'])
             pinyin = p.get_pinyin(translateResponse['translatedText'], splitter=' ', tone_marks='marks')
         else:
             detectResponse = translateClient.detect_language(word)
             translateResponse = translateClient.translate(word, 'en')
-            # pinyin = search_word_in_file(word)
             pinyin = p.get_pinyin(word, splitter=' ', tone_marks='marks')
 
         word_lang = detectResponse['language']
@@ -258,13 +246,6 @@ def reset_password_request():
     return render_template('reset_password_request.html', form=form)
 
 def send_password_reset_email(email, token):
-    # subject = 'Password Reset Request'
-    # msg_body = f'Click the following link to reset your password: {url_for("reset_password", token=token, _external=True)}'
-    # sender = 'noreply@app.com'
-    # msg = Message(subject, sender=sender, recipients=[email], body=msg_body)
-    # print(app.config['MAIL_SERVER'], app.config['MAIL_PORT'])
-    # mail.send(msg)
-
     data = {
         'Messages': [
                         {
@@ -341,7 +322,6 @@ def saved_searches():
     if not g.user:
         flash("Access unauthorized.", "danger")
         return jsonify({'error': 'Access unauthorized'}), 401
-    # user = current_user  # Assuming you are using Flask-Login
     saved_searches = Searches.query.filter_by(user_id=g.user.id, is_saved=True).order_by(Searches.id.desc()).all()
     return render_template('saved_searches.html', searches=saved_searches)
 
