@@ -3,7 +3,7 @@
 ## [Visit the deployed site]()
 
 ### Description
-The Translate Web App is a tool that allows users to translate words or phrases from English to Chinese and vice versa. Users can input text in the provided form, select the translation direction, and receive the translated text along with its corresponding pinyin (phonetic spelling). The app also features user authentication, a search history page, and the ability to save and unsave translations.
+The Translate Web App is a tool that allows users to translate words or phrases from English to Chinese and vice versa. Users can input text in the provided form, select the translation direction, and receive the translated text along with its corresponding pinyin (phonetic spelling). The app also features user authentication, a search history page, the ability to delete searches, and the ability to save and unsave translations.
 
 ### Features
 
