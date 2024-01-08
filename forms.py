@@ -13,7 +13,7 @@ class UserForm(FlaskForm):
 class TranslateForm(FlaskForm):
     """Form for translating."""
 
-    word = TextAreaField('Translate', validators=[DataRequired()], render_kw={"placeholder": "Enter what you want to translate"})
+    word = TextAreaField('Translate', validators=[DataRequired()], render_kw={"placeholder": "Enter English text..."})
 
 
 class PasswordResetRequestForm(FlaskForm):

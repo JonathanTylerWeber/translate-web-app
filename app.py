@@ -4,12 +4,13 @@ import os, json
 
 from flask import Flask, render_template, request, flash, redirect, session, g, url_for, jsonify
 from flask_debugtoolbar import DebugToolbarExtension 
-from flask_mail import Message, Mail
+# from flask_mail import Message, Mail
 from flask_bcrypt import Bcrypt
 from sqlalchemy.exc import IntegrityError
 import re
 import secrets
 from xpinyin import Pinyin
+from mailjet_rest import Client
 
 from forms import UserForm, TranslateForm, PasswordResetRequestForm
 from models import db, connect_db, User, Searches, PasswordResetRequest
@@ -20,7 +21,7 @@ load_dotenv()
 bcrypt = Bcrypt()
 p = Pinyin()
 
-CREDENTIALS = json.loads(os.environ.get('CREDENTIALS'))
+CREDENTIALS = json.loads(os.getenv('CREDENTIALS'))
 
 if os.path.exists('credentials.json'):
     pass
@@ -29,6 +30,10 @@ else:
         json.dump(CREDENTIALS, credFile)
 
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'credentials.json'
+
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret), version='v3.1')
 
 translateClient = translate.Client()
 
@@ -44,14 +49,14 @@ app.config['SQLALCHEMY_ECHO'] = False
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', "it's a secret")
 
-app.config['MAIL_SERVER'] = 'smtp.gmail.com'
-app.config['MAIL_PORT'] = 587
-app.config['MAIL_USERNAME'] = 'jonathantweber@gmail.com'
-app.config['MAIL_PASSWORD'] = os.environ.get('MAIL_PASSWORD')
-app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_DEBUG'] = True
+# app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+# app.config['MAIL_PORT'] = 587
+# app.config['MAIL_USERNAME'] = 'jonathantweber@gmail.com'
+# app.config['MAIL_PASSWORD'] = os.environ.get('MAIL_PASSWORD')
+# app.config['MAIL_USE_TLS'] = True
+# app.config['MAIL_DEBUG'] = True
+# mail = Mail(app)
 
-mail = Mail(app)
 # toolbar = DebugToolbarExtension(app)
 
 connect_db(app)
@@ -247,18 +252,40 @@ def reset_password_request():
         # Send the password reset email
         send_password_reset_email(email, token)
 
-        flash('An email has been sent with instructions to reset your password.', 'info')
+        flash('An email has been sent with instructions to reset your password. (It may be in your spam folder)', 'info')
         return redirect(url_for('login'))
 
     return render_template('reset_password_request.html', form=form)
 
 def send_password_reset_email(email, token):
-    subject = 'Password Reset Request'
-    msg_body = f'Click the following link to reset your password: {url_for("reset_password", token=token, _external=True)}'
-    sender = 'noreply@app.com'
-    msg = Message(subject, sender=sender, recipients=[email], body=msg_body)
-    print(app.config['MAIL_SERVER'], app.config['MAIL_PORT'])
-    mail.send(msg)
+    # subject = 'Password Reset Request'
+    # msg_body = f'Click the following link to reset your password: {url_for("reset_password", token=token, _external=True)}'
+    # sender = 'noreply@app.com'
+    # msg = Message(subject, sender=sender, recipients=[email], body=msg_body)
+    # print(app.config['MAIL_SERVER'], app.config['MAIL_PORT'])
+    # mail.send(msg)
+
+    data = {
+        'Messages': [
+                        {
+                                "From": {
+                                        "Email": "jonathantweber@gmail.com",
+                                        "Name": "Me"
+                                },
+                                "To": [
+                                        {
+                                                "Email": email,
+                                                "Name": "You"
+                                        }
+                                ],
+                                "Subject": 'Password Reset Request',
+                                "TextPart": f'Click the following link to reset your password: {url_for("reset_password", token=token, _external=True)}',
+                        }
+                ]
+    }
+    result = mailjet.send.create(data=data)
+    print(result.status_code)
+    print(result.json())
 
 
 @app.route('/reset-password/<token>', methods=['GET', 'POST'])

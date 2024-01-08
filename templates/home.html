@@ -4,7 +4,7 @@
 
 <div class="row justify-content-md-center align-items-center">
     <div class="col-lg-10 col-md-12 col-sm-12 text-center">
-        <h1 class="mb-5">Translate</h1>
+        <h1 class="mb-4">Translate</h1>
 
         <form id="translate-form" method="POST">
             {{ form.csrf_token }}
@@ -21,16 +21,16 @@
                 </div>
             </div>
 
-            <div class="row justify-content-center">
-                <div class="col-md-6 mb-4 mb-md-0">
-                    <div class="form-group row mb-4">
+            <div class="row justify-content-center translate box">
+                <div class="col-md-6 mb-md-0">
+                    <div class="form-group row ">
                         <div class="col">
                             {{ form.word(size=35, rows=4, id='word', class="form-control custom-textarea") }}
                         </div>
                     </div>
                 </div>
 
-                <div class="col-md-6">
+                <div class="col-md-6 mb-4">
                     <div class="white-box">
                         <div id="translation-container">
                             <p id="translation"></p>
