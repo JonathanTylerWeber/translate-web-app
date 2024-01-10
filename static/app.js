@@ -1,15 +1,14 @@
 const left = document.getElementById('left-side');
 
 const handleOnMove = e => {
-    const p = e.clientX ? e.clientX / window.innerWidth * 100 : e.touches[0].clientX / window.innerWidth * 100;
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const p = clientX / window.innerWidth * 100;
 
     left.style.width = `${p}%`;
 }
 
 document.onmousemove = e => handleOnMove(e);
-
-document.ontouchmove = e => handleOnMove(e.touches[0]);
-
+document.ontouchmove = e => handleOnMove(e);
 
 $(document).ready(function () {
     // Initialize the default direction
@@ -42,6 +41,12 @@ $(document).ready(function () {
         // Optionally, update other elements on the page based on the direction
     }
 
+    $('#word').on('keydown', function (event) {
+        if (event.key === "Enter" && !event.shiftKey) {
+            event.preventDefault(); // Prevents adding a new line in the textarea
+            $('#translate-form').submit(); // Trigger the form submission
+        }
+    });
 
     // Attach an event listener to the form submission
     $('#translate-form').submit(function (event) {

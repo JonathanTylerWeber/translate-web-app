@@ -232,6 +232,14 @@ a:hover {
     cursor: pointer;
 }
 
+.fa-language {
+    color: white;
+}
+
+.fa-language:hover {
+    color: #bb86fc;
+}
+
 #switch-direction {
     position: absolute;
     left: 50%;

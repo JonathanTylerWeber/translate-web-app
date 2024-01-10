@@ -25,7 +25,8 @@
                 <div class="col-md-6 mb-md-0">
                     <div class="form-group row ">
                         <div class="col">
-                            {{ form.word(size=35, rows=4, id='word', class="form-control custom-textarea") }}
+                            {{ form.word(size=35, rows=4, id='word', class="form-control custom-textarea",
+                            onkeydown="handleEnter(event)") }}
                         </div>
                     </div>
                 </div>
