@@ -10,6 +10,47 @@ const handleOnMove = e => {
 document.onmousemove = e => handleOnMove(e);
 document.ontouchmove = e => handleOnMove(e);
 
+
+// 
+// const leftSide = document.getElementById('left-side');
+// const rightSide = document.getElementById('right-side');
+
+// let isLeftTextDisplayed = true;
+// let isRightTextDisplayed = true;
+
+// document.addEventListener('mousemove', (e) => {
+//     const mouseX = (e.clientX / window.innerWidth) * 100;
+
+//     // Check if the mouse is within the left margin (15vw)
+//     if (mouseX <= 15) {
+//         if (!isLeftTextDisplayed) {
+//             leftSide.querySelector('.title').textContent = 'Translate from English to Chinese';
+//             isLeftTextDisplayed = true;
+//         }
+//         if (isRightTextDisplayed) {
+//             rightSide.querySelector('.title').textContent = 'ching chong';
+//             isRightTextDisplayed = false;
+//         }
+//     } else if (mouseX >= 85) {
+//         // Check if the mouse is within the right margin (15vw from the right)
+//         if (!isRightTextDisplayed) {
+//             rightSide.querySelector('.title').textContent = '把中文翻译成英文';
+//             isRightTextDisplayed = true;
+//         }
+//         if (isLeftTextDisplayed) {
+//             leftSide.querySelector('.title').textContent = 'Made by Jonathan Weber';
+//             isLeftTextDisplayed = false;
+//         }
+//     } else {
+//         // Reset the flags if the mouse is outside both margins
+//         isLeftTextDisplayed = true;
+//         isRightTextDisplayed = true;
+//     }
+// });
+
+
+// 
+
 $(document).ready(function () {
     // Initialize the default direction
     let direction = 'en_to_zh';
