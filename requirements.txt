@@ -37,5 +37,5 @@ SQLAlchemy==2.0.25
 typing_extensions==4.9.0
 urllib3==2.1.0
 Werkzeug==3.0.1
-WTForms==3.1.2
+WTForms==2.2.1
 xpinyin==0.7.6
