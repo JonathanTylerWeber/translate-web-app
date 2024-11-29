@@ -39,9 +39,9 @@ translateClient = translate.Client()
 CURR_USER_KEY = "curr_user"
 
 app = Flask(__name__)
-
+print(os.environ.get('DATABASE_URL', ''))
 app.config['SQLALCHEMY_DATABASE_URI'] = (
-    os.environ.get('DATABASE_URL', 'postgresql:///translate'))
+    os.environ.get('DATABASE_URL', ''))
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = False
