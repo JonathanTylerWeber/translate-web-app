@@ -1,0 +1,49 @@
+services:
+  web:
+    build: .
+    ports:
+      - "3000:5000"
+    volumes:
+      - .:/app
+      - /app/__pycache__
+    environment:
+      - FLASK_APP=app.py
+      - FLASK_ENV=development
+      # Additional env vars needed by the application
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/translate
+      - GOOGLE_APPLICATION_CREDENTIALS=/app/credentials.json
+    env_file:
+      - .env
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - app-network
+
+  db:
+    image: postgres:13
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=translate
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 2s
+      timeout: 2s
+      retries: 5
+      start_period: 2s
+
+networks:
+  app-network:
+    driver: bridge
+    driver_opts:
+      com.docker.network.bridge.host_binding_ipv4: "127.0.0.1"
+
+volumes:
+  postgres_data:

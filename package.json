@@ -1,0 +1,32 @@
+{
+    "name": "translate-web-app",
+    "version": "1.0.0",
+    "description": "Translation web application with Docker management scripts",
+    "scripts": {
+      "docker:build": "docker compose build",
+      "docker:up": "docker compose up",
+      "docker:down": "docker compose down",
+      "docker:destroy": "docker compose down -v --rmi all --remove-orphans",
+      "docker:rebuild": "npm run docker:destroy && npm run docker:build && npm run docker:up",
+      "docker:logs": "docker compose logs -f",
+      "docker:ps": "docker compose ps",
+      "docker:shell": "docker compose exec web bash",
+      "db:connect": "docker compose exec db psql -U postgres -d translate",
+      "start": "docker compose up",
+      "build": "docker compose build",
+      "clean": "docker compose down -v --rmi all --remove-orphans",
+      "restart": "docker compose restart",
+      "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+      "type": "git",
+      "url": "your-repository-url"
+    },
+    "keywords": [
+      "translation",
+      "flask",
+      "docker"
+    ],
+    "author": "",
+    "license": "ISC"
+  }
