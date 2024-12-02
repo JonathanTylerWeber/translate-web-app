@@ -25,6 +25,8 @@ jobs:
 
       - name: Create credentials.json
         run: |
+          echo "GOOGLE CREDS*********************"
+          echo "${{ secrets.GOOGLE_CREDENTIALS }}"
           echo "${{ secrets.GOOGLE_CREDENTIALS }}" > credentials.json
 
       - name: Build Docker image
