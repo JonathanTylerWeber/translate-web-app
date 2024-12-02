@@ -148,7 +148,7 @@ def translate():
             
             # detectResponse = translateClient.detect_language(word)
             print("detect response ***********")
-            print(detectResponse)
+            # print(detectResponse)
             # translateResponse = translateClient.translate(word, 'zh')
             # pinyin = p.get_pinyin(translateResponse['translatedText'], splitter=' ', tone_marks='marks')
         else:
