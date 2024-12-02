@@ -24,10 +24,12 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v2
 
       - name: Create credentials.json
+        env: 
+          GOOGLE: ${{ secrets.GOOGLE_CREDENTIALS }}
         run: |
           echo "GOOGLE CREDS*********************"
-          echo "${{ secrets.GOOGLE_CREDENTIALS }}"
-          echo "${{ secrets.GOOGLE_CREDENTIALS }}" > credentials.json
+          echo "$GOOGLE"
+          echo "$GOOGLE" > credentials.json
 
       - name: Build Docker image
         run: |
