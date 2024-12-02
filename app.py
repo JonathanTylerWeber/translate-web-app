@@ -145,7 +145,8 @@ def translate():
 
         if direction == 'en_to_zh':
             print("en to zh")
-            detectResponse = translateClient.detect_language(word)
+            
+            # detectResponse = translateClient.detect_language(word)
             print("detect response ***********")
             print(detectResponse)
             # translateResponse = translateClient.translate(word, 'zh')
@@ -171,7 +172,7 @@ def translate():
         # db.session.commit()
         # print("write to res")
         response_data = {
-            'translation': "test",
+            'translation': os.environ.get('GOOGLE_APPLICATION_CREDENTIALS'),
             'pinyin': "test"
         }
     except Exception as e:
