@@ -1,6 +1,8 @@
 from google.cloud import translate_v2 as translate
 from google.oauth2 import service_account
 
+import requests
+
 import os, json
 
 from flask import Flask, render_template, request, flash, redirect, session, g, url_for, jsonify
@@ -106,6 +108,22 @@ def home():
 
     return render_template('home.html', form=form)
 
+@app.route('/test-public-api', methods=["GET"])
+def test_public_api():
+    """Hit a simple public API and return the response."""
+    try:
+        # Make a GET request to a public API
+        response = requests.get('https://jsonplaceholder.typicode.com/todos')
+
+        # Check if the request was successful
+        if response.status_code == 200:
+            return jsonify(response.json()), 200
+        else:
+            return jsonify({'error': f'Failed to fetch data from public API. Status code: {response.status_code}'}), 500
+
+    except requests.exceptions.RequestException as e:
+        return jsonify({'error': str(e)}), 500
+
 @app.route('/health', methods=["POST"])
 def health():
     # Get the JSON data sent in the POST request (if necessary)
@@ -128,6 +146,7 @@ def health():
         return jsonify({'error': 'Error decoding credentials.json'}), 500
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
 
 
 @app.route('/translate', methods=["POST"])
