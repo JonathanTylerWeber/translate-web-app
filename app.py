@@ -95,6 +95,16 @@ def home():
 
     return render_template('home.html', form=form)
 
+@app.route('/health', methods=["POST"])
+def health():
+    # Get the JSON data sent in the POST request
+    request_data = request.get_json()
+
+    # Print the received request data (optional, for debugging)
+    print("Received request data:", request_data)
+    
+    # Return the same data as the response
+    return jsonify(request_data), 200
 
 @app.route('/translate', methods=["POST"])
 def translate():
