@@ -145,32 +145,32 @@ def translate():
 
         if direction == 'en_to_zh':
             print("en to zh")
-            detectResponse = translateClient.detect_language(word)
-            translateResponse = translateClient.translate(word, 'zh')
-            pinyin = p.get_pinyin(translateResponse['translatedText'], splitter=' ', tone_marks='marks')
+            # detectResponse = translateClient.detect_language(word)
+            # translateResponse = translateClient.translate(word, 'zh')
+            # pinyin = p.get_pinyin(translateResponse['translatedText'], splitter=' ', tone_marks='marks')
         else:
             print("zh to en")
-            detectResponse = translateClient.detect_language(word)
-            translateResponse = translateClient.translate(word, 'en')
-            pinyin = p.get_pinyin(word, splitter=' ', tone_marks='marks')
+            # detectResponse = translateClient.detect_language(word)
+            # translateResponse = translateClient.translate(word, 'en')
+            # pinyin = p.get_pinyin(word, splitter=' ', tone_marks='marks')
 
-        word_lang = detectResponse['language']
-        translation_text = translateResponse['translatedText']
-        print("out of if elses")
-        search = Searches(
-            word=word,
-            word_lang=word_lang,
-            translation=translation_text,
-            pinyin=pinyin,
-            user_id=g.user.id
-        )
-        print("write to db")
-        db.session.add(search)
-        db.session.commit()
-        print("write to res")
+        # word_lang = detectResponse['language']
+        # translation_text = translateResponse['translatedText']
+        # print("out of if elses")
+        # search = Searches(
+        #     word=word,
+        #     word_lang=word_lang,
+        #     translation=translation_text,
+        #     pinyin=pinyin,
+        #     user_id=g.user.id
+        # )
+        # print("write to db")
+        # db.session.add(search)
+        # db.session.commit()
+        # print("write to res")
         response_data = {
-            'translation': translation_text,
-            'pinyin': pinyin
+            'translation': "test",
+            'pinyin': "test"
         }
     except Exception as e:
         app.logger.exception('An error occurred during translation:')
