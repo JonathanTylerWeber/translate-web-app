@@ -20,23 +20,27 @@ load_dotenv()
 bcrypt = Bcrypt()
 p = Pinyin()
 
-CREDENTIALS = json.loads(os.getenv('CREDENTIALS'))
+# CREDENTIALS = json.loads(os.getenv('CREDENTIALS'))
 
-if os.path.exists('credentials.json'):
-    print("no credentials file found")
-    pass
-else:
-    print("write credentials")
-    with open('credentials.json', 'w') as credFile:
-        json.dump(CREDENTIALS, credFile)
+# if os.path.exists('credentials.json'):
+#     print("no credentials file found")
+#     pass
+# else:
+#     print("write credentials")
+#     with open('credentials.json', 'w') as credFile:
+#         json.dump(CREDENTIALS, credFile)
 
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'credentials.json'
+# os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'credentials.json'
+
+# new creds
+credentials = google.auth.credentials.Credentials.from_authorized_user_info(json.loads(os.getenv('CREDENTIALS')))
+translateClient = translate.Client(credentials=credentials)
 
 api_key = os.environ['MJ_APIKEY_PUBLIC']
 api_secret = os.environ['MJ_APIKEY_PRIVATE']
 mailjet = Client(auth=(api_key, api_secret), version='v3.1')
 
-translateClient = translate.Client()
+# translateClient = translate.Client()
 
 CURR_USER_KEY = "curr_user"
 
@@ -146,34 +150,34 @@ def translate():
         if direction == 'en_to_zh':
             print("en to zh")
             
-            # detectResponse = translateClient.detect_language(word)
+            detectResponse = translateClient.detect_language(word)
             print("detect response ***********")
-            # print(detectResponse)
-            # translateResponse = translateClient.translate(word, 'zh')
-            # pinyin = p.get_pinyin(translateResponse['translatedText'], splitter=' ', tone_marks='marks')
+            print(detectResponse)
+            translateResponse = translateClient.translate(word, 'zh')
+            pinyin = p.get_pinyin(translateResponse['translatedText'], splitter=' ', tone_marks='marks')
         else:
             print("zh to en")
-            # detectResponse = translateClient.detect_language(word)
-            # translateResponse = translateClient.translate(word, 'en')
-            # pinyin = p.get_pinyin(word, splitter=' ', tone_marks='marks')
+            detectResponse = translateClient.detect_language(word)
+            translateResponse = translateClient.translate(word, 'en')
+            pinyin = p.get_pinyin(word, splitter=' ', tone_marks='marks')
 
-        # word_lang = detectResponse['language']
-        # translation_text = translateResponse['translatedText']
-        # print("out of if elses")
-        # search = Searches(
-        #     word=word,
-        #     word_lang=word_lang,
-        #     translation=translation_text,
-        #     pinyin=pinyin,
-        #     user_id=g.user.id
-        # )
-        # print("write to db")
-        # db.session.add(search)
-        # db.session.commit()
-        # print("write to res")
+        word_lang = detectResponse['language']
+        translation_text = translateResponse['translatedText']
+        print("out of if elses")
+        search = Searches(
+            word=word,
+            word_lang=word_lang,
+            translation=translation_text,
+            pinyin=pinyin,
+            user_id=g.user.id
+        )
+        print("write to db")
+        db.session.add(search)
+        db.session.commit()
+        print("write to res")
         response_data = {
-            'translation': os.environ.get('GOOGLE_APPLICATION_CREDENTIALS'),
-            'pinyin': "test"
+            'translation': translation_text,
+            'pinyin': pinyin
         }
     except Exception as e:
         app.logger.exception('An error occurred during translation:')
