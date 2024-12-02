@@ -1,4 +1,5 @@
 from google.cloud import translate_v2 as translate
+from google.oauth2 import service_account
 
 import os, json
 
@@ -33,7 +34,13 @@ p = Pinyin()
 # os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'credentials.json'
 
 # new creds
-credentials = google.auth.credentials.Credentials.from_authorized_user_info(json.loads(os.getenv('CREDENTIALS')))
+# Load the credentials from the environment variable (as JSON string)
+credentials_info = json.loads(os.getenv('CREDENTIALS'))
+
+# Create credentials using the correct method
+credentials = service_account.Credentials.from_service_account_info(credentials_info)
+
+# Initialize the translate client with the credentials
 translateClient = translate.Client(credentials=credentials)
 
 api_key = os.environ['MJ_APIKEY_PUBLIC']
