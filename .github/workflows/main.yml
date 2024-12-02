@@ -2,7 +2,7 @@ name: Build and Push Docker Image to ECR
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   build-and-push:
@@ -24,12 +24,14 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v2
 
       - name: Create credentials.json
-        env: 
+        env:
           GOOGLE: ${{ secrets.GOOGLE_CREDENTIALS }}
         run: |
           echo "GOOGLE CREDS*********************"
           echo "$GOOGLE"
           echo "$GOOGLE" > credentials.json
+          ls ./
+          cat ./credentials.json
 
       - name: Build Docker image
         run: |
@@ -42,5 +44,3 @@ jobs:
       - name: Push Docker image to ECR
         run: |
           docker push 205930623789.dkr.ecr.us-west-2.amazonaws.com/translate_app:latest
-
- 
