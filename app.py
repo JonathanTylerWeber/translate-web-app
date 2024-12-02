@@ -145,7 +145,9 @@ def translate():
 
         if direction == 'en_to_zh':
             print("en to zh")
-            # detectResponse = translateClient.detect_language(word)
+            detectResponse = translateClient.detect_language(word)
+            print("detect response ***********")
+            print(detectResponse)
             # translateResponse = translateClient.translate(word, 'zh')
             # pinyin = p.get_pinyin(translateResponse['translatedText'], splitter=' ', tone_marks='marks')
         else:
