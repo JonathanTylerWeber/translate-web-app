@@ -97,14 +97,27 @@ def home():
 
 @app.route('/health', methods=["POST"])
 def health():
-    # Get the JSON data sent in the POST request
+    # Get the JSON data sent in the POST request (if necessary)
     request_data = request.get_json()
 
     # Print the received request data (optional, for debugging)
     print("Received request data:", request_data)
     
-    # Return the same data as the response
-    return jsonify(request_data), 200
+    try:
+        # Open and read the credentials.json file
+        with open('credentials.json', 'r') as cred_file:
+            credentials = json.load(cred_file)
+        
+        # Return the contents of credentials.json as JSON
+        return jsonify(credentials), 200
+
+    except FileNotFoundError:
+        return jsonify({'error': 'credentials.json file not found'}), 404
+    except json.JSONDecodeError:
+        return jsonify({'error': 'Error decoding credentials.json'}), 500
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
 
 @app.route('/translate', methods=["POST"])
 def translate():
